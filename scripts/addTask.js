@@ -18,7 +18,7 @@ function addTask(event) {
   let taskDeadlineDate = deadlineInput.value;
 
   function validateInput(inputText, input) {
-    if (inputText === '') {
+    if (!inputText) {
       input.classList.add('field__control--error');
       return true;
     } else {
@@ -34,7 +34,7 @@ function addTask(event) {
     return false;
   }
 
-  if (taskDeadlineDate === '') {
+  if (!taskDeadlineDate) {
     taskDeadlineDate = 'Not set';
   } else {
     taskDeadlineDate = taskDeadlineDate.split('-').reverse().join('.');

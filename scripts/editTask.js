@@ -28,14 +28,14 @@ function editCurrentTask(event) {
   taskDetailText = detailInput.value;
   taskDeadlineDate = deadlineInput.value;
 
-  if (taskDeadlineDate === '') {
+  if (!taskDeadlineDate) {
     taskDeadlineDate = 'Not set';
   } else {
     taskDeadlineDate = taskDeadlineDate.split('-').reverse().join('.');
   }
 
   function validateInput(inputText, input) {
-    if (inputText === '') {
+    if (!inputText) {
       input.classList.add('field__control--error');
       return true;
     } else {

@@ -34,7 +34,7 @@ if (localStorage.getItem('tasks')) {
 }
 
 function checkEmptyList() {
-  if (tasks.length === 0) {
+  if (!tasks.length) {
     const emptyList = emptyListTemplate.content.querySelector('.empty-list');
     taskList.insertAdjacentElement('afterbegin', emptyList);
   }

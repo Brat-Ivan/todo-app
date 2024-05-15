@@ -1,3 +1,5 @@
+import { PRIORITY, SORT_DROPDOWN_TEXT, PRIORITY_ARR } from "./constants.js";
+
 const taskList = document.querySelector('.task-list');
 const taskTemplate = document.querySelector('#task-template');
 const emptyListTemplate = document.querySelector('#empty-list-template');
@@ -25,11 +27,11 @@ function renderTasks() {
     taskPriority.textContent = `Priority: ${task.priority}`;
     taskListItem.id = task.id;
 
-    if (task.priority === 'High') {
+    if (task.priority === PRIORITY.high) {
       taskElement.classList.add('task--priority--high');
-    } else if (task.priority === 'Medium') {
+    } else if (task.priority === PRIORITY.medium) {
       taskElement.classList.add('task--priority--medium');
-    } else if (task.priority === 'Low') {
+    } else if (task.priority === PRIORITY.low) {
       taskElement.classList.add('task--priority--low');
     }
     
@@ -47,11 +49,30 @@ if (localStorage.getItem('tasks')) {
 }
 
 function checkEmptyList() {
-  if (tasks.length === 0) {
-    const emptyList = emptyListTemplate.content.querySelector('.empty-list');
-    taskList.insertAdjacentElement('afterbegin', emptyList);
+  const tasksLength = tasks.length;
+  if (
+    !tasksLength ||
+    (tasksLength === taskList.querySelectorAll('.task-list__item--done-task').length &&
+    taskList.classList.contains('task-list--hidden-completed'))
+  ) {
+    const emptyList = emptyListTemplate.content.cloneNode(true);
+    const emptyListItem = emptyList.querySelector('.empty-list');
+    const emptyListText = emptyListItem.querySelector('.empty-list__text');
+    
+    if (tasksLength) {
+      emptyListText.textContent = 'All tasks are completed';
+    } else {
+      emptyListText.textContent = 'ToDo list is empty';
+    }
+
+    const emptyListElement = document.querySelector('.empty-list');
+
+    if (!emptyListElement) {
+      taskList.insertAdjacentElement('afterbegin', emptyListItem);
+    }
   } else {
     const emptyListElement = document.querySelector('.empty-list');
+    
     if (emptyListElement) {
       emptyListElement.remove();
     }
@@ -102,6 +123,10 @@ function doneTask(event) {
   localStorage.setItem('tasks', JSON.stringify(tasks));
   parentNode.classList.toggle('task-list__item--done-task');
   editBtn.classList.toggle('task__button--disabled');
+
+  if (uncompletedBtnText.textContent === 'All') {
+    checkEmptyList();
+  }
 }
 
 taskList.addEventListener('click', doneTask);
@@ -114,23 +139,21 @@ function sortTasks() {
   let item2;
 
   const sortedItems = [...taskListItems].sort((a, b) => {
-    if (sortDropdownValue === 'Title') {
-      item1 = a.children[0].children[0].children[0].textContent;
-      item2 = b.children[0].children[0].children[0].textContent;
+    if (sortDropdownValue === SORT_DROPDOWN_TEXT.title) {
+      item1 = a.children[0].children[0].children[0].textContent.toLowerCase();
+      item2 = b.children[0].children[0].children[0].textContent.toLowerCase();
 
       if (item1 > item2) return 1;
-    } else if (sortDropdownValue === 'Deadline') {
+    } else if (sortDropdownValue === SORT_DROPDOWN_TEXT.deadline) {
       item1 = +a.children[0].children[0].children[2].children[0].textContent.slice(10).split('.').reverse().join('');
       item2 = +b.children[0].children[0].children[2].children[0].textContent.slice(10).split('.').reverse().join('');
 
       if (isNaN(item1) && !isNaN(item2) || isNaN(item1) || item1 > item2) return 1;
-    } else if (sortDropdownValue === 'Priority') {
-      const priorityArr = ['Priority: High', 'Priority: Medium', 'Priority: Low', 'Priority: None']
-
+    } else if (sortDropdownValue === SORT_DROPDOWN_TEXT.priority) {
       item1 = a.children[0].children[0].children[2].children[1].textContent;
       item2 = b.children[0].children[0].children[2].children[1].textContent;
 
-      if (priorityArr.indexOf(item1) > priorityArr.indexOf(item2)) return 1;
+      if (PRIORITY_ARR.indexOf(item1) > PRIORITY_ARR.indexOf(item2)) return 1;
     } else {
       item1 = +a.id;
       item2 = +b.id;
@@ -155,6 +178,7 @@ function hideCompletedTasks() {
   } else {
     uncompletedBtnText.textContent = 'Uncompleted';
   }
+  checkEmptyList();
 }
 
 uncompletedBtn.addEventListener('click', hideCompletedTasks)

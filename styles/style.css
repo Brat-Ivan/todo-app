@@ -17,6 +17,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 h1, h2 {
@@ -340,7 +341,11 @@ body {
 }
 
 .form__field {
-  margin: 0 15px 43px;
+  margin: 0 15px 20px;
+}
+
+.form__field:last-of-type {
+  margin-top: 16px;
 }
 
 .field__control {
@@ -359,12 +364,12 @@ body {
 }
 
 .field__control--error + .error {
-  display: block;
+  opacity: 1;
 }
 
 .error {
-  display: none;
   color: var(--color-accent-2);
+  opacity: 0;
 }
 
 .field__label {
@@ -376,6 +381,7 @@ body {
   width: min-content;
   border: none;
   border-bottom: 1px solid var(--color-accent-1);
+  background-color: var(--color-main);
   outline: none;
 }
 
@@ -389,7 +395,7 @@ body {
   border-radius: 15px;
   color: inherit;
   background-color: var(--color-accent-2);
-  margin-top: 11px;
+  margin-top: 34px;
   box-shadow: 0 4px 4px 0 var(--color-shadow);
   cursor: pointer;
   transition: opacity 0.3s, color 0.3s, background-color 0.3s;
@@ -555,7 +561,11 @@ body {
   }
 
   .form__field {
-    margin: 0 20px 48px;
+    margin: 0 20px 19px;
+  }
+
+  .form__field:last-of-type {
+    margin-top: 18px;
   }
   
   .field__control {
@@ -584,7 +594,7 @@ body {
   .form__add-button,
   .form__edit-button {
     border-radius: 18px;
-    margin-top: 16px;
+    margin-top: 45px;
   }
   
   .form__add-button {
@@ -737,13 +747,17 @@ body {
     font-size: 16px;
   }
 
-  .form {
+  .main__form {
     width: 75%;
     margin: 0 auto;
   }
 
   .form__field {
-    margin: 0 22px 50px;
+    margin: 0 22px 18px;
+  }
+
+  .form__field:last-of-type {
+    margin-top: 20px;
   }
   
   .field__control {
@@ -772,7 +786,7 @@ body {
   .form__add-button,
   .form__edit-button {
     border-radius: 20px;
-    margin-top: 18px;
+    margin-top: 50px;
   }
   
   .form__add-button {
